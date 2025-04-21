@@ -6,3 +6,5 @@ pandas_ta
 matplotlib
 plotly
 scikit-learn
+coloredlogs
+verboselogs
