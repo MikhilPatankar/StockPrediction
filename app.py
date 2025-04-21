@@ -12,6 +12,14 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
+
+from verboselogs import VerboseLogger, VERBOSE
+from coloredlogs import install as Cloginstall
+
+#Initialize Logger
+logger = VerboseLogger('APP')
+Cloginstall(level=VERBOSE, fmt='[%(asctime)s] | [%(name)s] | %(levelname)-8s | %(message)s')
+
 logging.getLogger('cmdstanpy').setLevel(logging.WARNING)
 logging.getLogger('prophet').setLevel(logging.WARNING)
 
@@ -19,6 +27,7 @@ app = Flask(__name__)
 
 def get_stock_data(symbol):
     try:
+        logger.info(f"Getting Historic Data for Stock: {symbol}")
         stock = Ticker(symbol)
         history = stock.history(period="48mo")
         if history.empty or isinstance(history, dict):
@@ -32,9 +41,11 @@ def get_stock_data(symbol):
         data.dropna(inplace=True)
         if data.empty:
              raise ValueError(f"Not enough historical data after processing for: {symbol}")
+        
+        logger.success(f"Retrived Stock Data Succesfully!")
         return data
     except Exception as e:
-        print(f"Error getting stock data for {symbol}: {e}")
+        logger.warning(f"Error getting stock data for {symbol}: {e}")
         raise
 
 def prepare_for_prophet(data):
@@ -43,15 +54,19 @@ def prepare_for_prophet(data):
     return df_train
 
 def train_and_forecast(df_train, periods=365):
+    logger.info("Training Model")
     model = Prophet(yearly_seasonality=True, weekly_seasonality=True, daily_seasonality=False)
     model.add_seasonality(name='monthly', period=30.5, fourier_order=5)
     model.fit(df_train)
     future = model.make_future_dataframe(periods=periods)
+    logger.success("Model Trained!")
     forecast = model.predict(future)
+    logger.success("Forcast Predicted!")
     return model, forecast
 
 def create_plot(model, forecast, symbol):
     try:
+        logger.info("Creating Plot!")
         fig = model.plot(forecast)
         from prophet.plot import add_changepoints_to_plot
         ax = fig.gca()
@@ -68,9 +83,10 @@ def create_plot(model, forecast, symbol):
 
         image_base64 = base64.b64encode(buf.read()).decode('utf-8')
         buf.close()
+        logger.success("Plot Created!")
         return f"data:image/png;base64,{image_base64}"
     except Exception as e:
-        print(f"Error creating plot: {e}")
+        logger.warning(f"Error creating plot: {e}")
         plt.close(fig)
         return None
 
@@ -95,7 +111,7 @@ def predict():
         return render_template("form.html", symbol=symbol, forecast_tail=forecast_tail, plot_url=plot_url, error=None)
 
     except Exception as e:
-        print(f"Error during prediction for {symbol}: {e}")
+        logger.warning(f"Error during prediction for {symbol}: {e}")
         return render_template("form.html", symbol=symbol, error=str(e))
 
 
