@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stock Predictor</title>
+     <style>
+      body { font-family: sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 80vh; background-color: #f4f4f4; }
+      .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1); text-align: center; }
+      input[type=text] { padding: 10px; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
+      input[type=submit] { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+      input[type=submit]:hover { background-color: #0056b3; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <h1>Stock Price Predictor</h1>
+        <form action="/predict" method="get">
+            <label for="symbol">Enter Stock Symbol (e.g., AAPL, GOOG, WEGE3.SA):</label><br><br>
+            <input type="text" id="symbol" name="symbol" required>
+            <input type="submit" value="Get Forecast">
+        </form>
+    </div>
+  </body>
+</html>
