@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,15 +6,17 @@
     <title>{{ symbol }} Forecast</title>
     <style>
       body { font-family: sans-serif; padding: 20px; background-color: #f4f4f4; }
-      h1, h2 { text-align: center; color: #333; }
+      h1, h2 { text-align: center; color: #333; margin-top: 30px; margin-bottom: 15px;}
       .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
       .error { color: #dc3545; font-weight: bold; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
-      .prediction { background-color: #e2e3e5; border: 1px solid #d6d8db; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+      .prediction { background-color: #e2e3e5; border: 1px solid #d6d8db; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center; }
       .prediction strong { color: #0056b3; }
+      .prediction .value { font-size: 1.2em; font-weight: bold; }
       img { max-width: 100%; height: auto; display: block; margin: 20px auto; border: 1px solid #ddd; border-radius: 4px; }
       a { color: #007bff; text-decoration: none; }
       a:hover { text-decoration: underline; }
       .back-link { display: block; text-align: center; margin-top: 20px; }
+      hr { margin-top: 30px; margin-bottom: 30px; border: 0; border-top: 1px solid #eee; }
     </style>
   </head>
   <body>
@@ -25,13 +26,14 @@
         <p class="error">Error: {{ error }}</p>
       {% else %}
         <h2>Forecast for Date: {{ target_date_str }}</h2>
-        {% if prediction is not none %}
+        {% if prediction is not none %} {# Check if prediction is not None #}
           <div class="prediction">
-            The predicted adjusted closing price (yhat) for <strong>{{ symbol }}</strong> on <strong>{{ target_date_str }}</strong> is: <strong>{{ "%.2f"|format(prediction['yhat']) }}</strong><br>
-            Predicted Range (yhat_lower - yhat_upper): {{ "%.2f"|format(prediction['yhat_lower']) }} - {{ "%.2f"|format(prediction['yhat_upper']) }}
+            Predicted Adj. Close Price:<br>
+            <span class="value">{{ "%.2f"|format(prediction['yhat']) }}</span><br>
+            <small>Range: {{ "%.2f"|format(prediction['yhat_lower']) }} - {{ "%.2f"|format(prediction['yhat_upper']) }}</small>
           </div>
         {% else %}
-           <p class="error">Could not find prediction for the specified date in the forecast range.</p>
+           <p class="error">Could not find prediction for the specified date. It might be a non-trading day or outside the forecast range.</p>
         {% endif %}
 
         <h2>Forecast Plot</h2>
@@ -40,6 +42,16 @@
         {% else %}
           <p>Could not generate plot.</p>
         {% endif %}
+
+        {# --- ADDED SECTION for Components Plot --- #}
+        <hr>
+        <h2>Forecast Components</h2>
+        {% if components_plot_url %}
+          <img src="{{ components_plot_url }}" alt="Forecast Components Plot">
+        {% else %}
+          <p>Could not generate components plot.</p>
+        {% endif %}
+        {# --- END ADDED SECTION --- #}
 
       {% endif %}
        <p class="back-link"><a href="/">Try another symbol or date</a></p>

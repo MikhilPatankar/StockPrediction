@@ -135,6 +135,28 @@ def create_plot(model, forecast, symbol, target_date):
         except: pass
         return None
 
+def create_components_plot(model, forecast):
+    fig = None
+    try:
+        fig = model.plot_components(forecast)
+        plt.tight_layout()
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight')
+        buf.seek(0)
+
+        image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+        buf.close()
+        plt.close(fig)
+        return f"data:image/png;base64,{image_base64}"
+    except Exception as e:
+        print(f"Error creating components plot: {e}")
+        traceback.format_exc()
+        if fig:
+             try: plt.close(fig)
+             except: pass
+        return None
+    
 
 @app.route('/')
 def home():
@@ -185,12 +207,17 @@ def predict():
         plot_url = create_plot(model, forecast, symbol, target_date)
         logger.success("Plot generated.")
 
+        print("Generating components plot...")
+        components_plot_url = create_components_plot(model, forecast)
+        print("Components plot generated.")
+        
         return render_template(
             "form.html",
             symbol=symbol,
             target_date_str=target_date_str,
             prediction=specific_prediction,
             plot_url=plot_url,
+            components_plot_url=components_plot_url,
             error=None
         )
 
