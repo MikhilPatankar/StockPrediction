@@ -1,0 +1,8 @@
+flask
+prophet
+yahooquery
+pandas
+pandas_ta
+matplotlib
+plotly
+scikit-learn
