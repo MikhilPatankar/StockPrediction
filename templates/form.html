@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ symbol }} Forecast</title>
+    <style>
+      body { font-family: sans-serif; padding: 20px; }
+      h1, h2 { text-align: center; }
+      .container { max-width: 800px; margin: auto; background: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+      .error { color: red; font-weight: bold; }
+      img { max-width: 100%; height: auto; display: block; margin: 20px auto; }
+      table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+      th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+      th { background-color: #f2f2f2; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Stock Forecast for {{ symbol }}</h1>
+      {% if error %}
+        <p class="error">Error: {{ error }}</p>
+      {% else %}
+        <h2>Forecast Plot</h2>
+        {% if plot_url %}
+          <img src="{{ plot_url }}" alt="Forecast Plot">
+        {% else %}
+          <p>Could not generate plot.</p>
+        {% endif %}
+
+        <h2>Forecasted Values (Next 5 Days)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date (ds)</th>
+              <th>Predicted (yhat)</th>
+              <th>Lower Bound (yhat_lower)</th>
+              <th>Upper Bound (yhat_upper)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for index, row in forecast_tail.iterrows() %}
+            <tr>
+              <td>{{ row['ds'].strftime('%Y-%m-%d') }}</td>
+              <td>{{ "%.2f"|format(row['yhat']) }}</td>
+              <td>{{ "%.2f"|format(row['yhat_lower']) }}</td>
+              <td>{{ "%.2f"|format(row['yhat_upper']) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+       <p><a href="/">Try another symbol</a></p>
+    </div>
+  </body>
+</html>
