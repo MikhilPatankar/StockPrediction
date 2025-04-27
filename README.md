@@ -22,11 +22,16 @@ This project is a web application built with Flask that predicts future stock pr
 * **Plotting:** Matplotlib
 * **Frontend:** HTML, CSS (embedded in Flask templates/strings)
 
+## Deploy on Heroku
+
+### [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/MikhilPatankar/StockPrediction)
+
+
 ## Setup and Installation
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/MikhilPatankar/StockPrediction.git](https://github.com/MikhilPatankar/StockPrediction.git)
+    git clone https://github.com/MikhilPatankar/StockPrediction.git
     cd StockPrediction
     ```
 

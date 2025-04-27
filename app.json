@@ -1,0 +1,12 @@
+{
+  "name": "Stock Prediction",
+  "description": "Deploy Stock Prediction Project on Heroku.",
+  "repository": "https://github.com/MikhilPatankar/StockPrediction",
+  "stack": "container",
+  "env": {
+    "PORT": {
+            "description": "Define PORT [int]",
+            "value": "8080"
+    }
+  }
+}
