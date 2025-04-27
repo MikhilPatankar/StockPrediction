@@ -1,5 +1,5 @@
 import logging
-import io
+import io, os
 import base64
 import matplotlib
 import traceback
@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 from flask import Flask, request, jsonify, render_template
 from prophet import Prophet
 from yahooquery import Ticker
-from datetime import datetime
 from datetime import datetime, date
 from verboselogs import VerboseLogger, VERBOSE
 from coloredlogs import install as Cloginstall
@@ -25,6 +24,8 @@ logging.getLogger('cmdstanpy').setLevel(logging.WARNING)
 logging.getLogger('prophet').setLevel(logging.WARNING)
 
 app = Flask(__name__)
+
+PORT = os.environ.get('PORT', 8080)
 
 def get_stock_data(symbol):
     try:
@@ -232,4 +233,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port="8080")
+    app.run(debug=True, host="0.0.0.0", port=PORT)
