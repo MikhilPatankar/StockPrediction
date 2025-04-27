@@ -67,10 +67,12 @@ This project is a web application built with Flask that predicts future stock pr
 3.  **Enter Parameters:**
     * Input a valid stock ticker symbol recognized by Yahoo Finance (e.g., `AAPL`, `MSFT`, `GOOG`, `WEGE3.SA`).
     * Select the future date for which you want the prediction.
+![Screenshot 2025-04-27 144719](https://github.com/user-attachments/assets/d6d78ccb-468a-4dfb-bfaa-99eb0c89bf3d)
 
 4.  **Submit:** Click the "Get Forecast" button.
 
 5.  **View Results:** The application will display the predicted price for the selected date, along with the forecast plot and the components plot.
+![image](https://github.com/user-attachments/assets/8d27d7d0-99ef-466d-b902-4301cc2333b2)
 
 ## Future Improvements
 
