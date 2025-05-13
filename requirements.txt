@@ -1,7 +1,7 @@
 flask
 prophet
 yahooquery
-pandas
+pandas==2.2.2
 matplotlib
 plotly
 scikit-learn
